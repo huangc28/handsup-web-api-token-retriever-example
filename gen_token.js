@@ -6,9 +6,14 @@
 // via matching	`VUE_APP_API_TOKEN` in`.env.development.local`. If not match found
 // in `.env.development.local`, it simply append a api key on the rear on the file.
 // 
-// usage: 
-//    gen_token -p <password> -u <username>
+// Usage: 
+// 
+//    gen_token <fb_username> <fb_password>
+//    gen_token -h | --help
 //
+// Options:
+// 
+//   -h --help  Show this screen
 
 const puppeteer = require('puppeteer')
 const fs = require('fs')
@@ -126,5 +131,7 @@ function goFlow () {
   go(gen.next())
     .catch(err => console.error('outside the flow', err))
 }
+
+// Retrieve arguments via process
 
 goFlow()
