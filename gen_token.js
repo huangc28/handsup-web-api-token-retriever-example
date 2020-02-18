@@ -3,7 +3,12 @@
 // A command line tool to refresh `api_token` for requesting handsup api.
 // It uses `puppeteer` to automate handup facebook login procedure to retrieve.
 // new api token. The newly retrieved `api_token` will replace the one found in 
-// via matching	`VUE_APP_API_TOKEN` in`.env.development.local`.
+// via matching	`VUE_APP_API_TOKEN` in`.env.development.local`. If not match found
+// in `.env.development.local`, it simply append a api key on the rear on the file.
+// 
+// usage: 
+//    gen_token -p <password> -u <username>
+//
 
 const puppeteer = require('puppeteer')
 const fs = require('fs')
