@@ -32,8 +32,7 @@ function * tokenGenFlow (username, password, envOrigin, dotEnvFilePath) {
   try {
     const browser = yield puppeteer.launch({
       dumpio: true,
-      headless: false,
-      devtools: true,
+      headless: true,
       ignoreHTTPSErrors: true,
       product: 'chrome',
       args: ['--disable-notifications']
