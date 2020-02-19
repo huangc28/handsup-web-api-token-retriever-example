@@ -1,15 +1,15 @@
 {
   "name": "handsup-web-api-token-retriever-example",
   "version": "0.0.1",
-  "description": "Auto replacing web api token",
-  "main": "index.js",
+  "description": "A convenient tool to generate handsup API token",
+  "main": "cli.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/huangc28/handsup-web-api-token-retriever-example.git"
   },
   "author": "Bryan Huang <bryan@handsup.shop>",
   "bin": {
-    "gen_token": "./gen_token.js"
+    "gen_token": "./cli.js"
   },
   "license": "ISC",
   "bugs": {
@@ -20,8 +20,5 @@
     "chalk": "^3.0.0",
     "puppeteer": "^2.1.1"
   },
-  "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/node": "^7.8.4"
-  }
+  "devDependencies": {}
 }
