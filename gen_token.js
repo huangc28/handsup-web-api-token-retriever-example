@@ -9,15 +9,18 @@
 // Usage: 
 // 
 //    gen_token <fb_username> <fb_password>
+//    gen_token <fb_username> <fb_password> [-e] [alpha | stg | prod]
 //    gen_token -h | --help
 //
 // Options:
 // 
-//   -h --help  Show this screen
+//   -h --help  Show this screen.
+//   -e         Specify handsup environment where the API token is retrieved from.
 
 const puppeteer = require('puppeteer')
 const fs = require('fs')
 const path = require('path')
+const chalk = require('chalk')
 
 const { 
   readDotEnvFile, 
@@ -25,7 +28,7 @@ const {
   appendToDotEnvFile
 } = require('./helpers/fs')
 
-function * tokenGenFlow () {
+function * tokenGenFlow (username, password) {
   try {
     const browser = yield puppeteer.launch({
       dumpio: true,
@@ -47,9 +50,9 @@ function * tokenGenFlow () {
     
     // Prompt facebook email and password
     yield newPage.focus('#email')
-    yield newPage.keyboard.type('belle.hsu2333@gmail.com')
+    yield newPage.keyboard.type(username)
     yield newPage.focus('#pass')
-    yield newPage.keyboard.type('2333@handsup')
+    yield newPage.keyboard.type(password)
 
     
     // Clicked on the facebook logged in button, wait to navigation to be done
@@ -111,8 +114,8 @@ function * tokenGenFlow () {
   }
 }
 
-function goFlow () {
-  const gen = tokenGenFlow()
+function goFlow (username, password) {
+  const gen = tokenGenFlow(username, password)
   const go = node => {
     if (node.done) return
     
@@ -132,6 +135,55 @@ function goFlow () {
     .catch(err => console.error('outside the flow', err))
 }
 
-// Retrieve arguments via process
+function displayDocument () {
+  console.log(
+    'Usage: \n\n' + 
+    '  gen_token <fb_username> <fb_password> \n' + 
+    '  gen_token <fb_username> <fb_password> [-e] [alpha | stg | prod] \n' +
+    '  gen_token -h | --help \n\n' +
+    'Options: \n\n' + 
+    '  -h --help  Show command document\n' + 
+    '  -e         Specify handsup environment where the API token is retrieved from\n'
+  )
+}
 
-goFlow()
+const args = process.argv.slice(2)
+const credentials = args.slice(0, 3)
+const [username, password] = credentials 
+const displayDoc = args.some(option => option === '--help' || option === '-h' )
+
+//const env = args.find  
+//console.log(process.argv)
+console.log('DEBUG~~', displayDoc)
+
+// Usage: 
+// 
+//    gen_token <fb_username> <fb_password>
+//    gen_token -h | --help
+//
+// Options:
+// 
+//   -h --help  Show this screen
+if (displayDoc) {
+  displayDocument()
+
+  process.exit(1)
+}
+
+if (credentials.length < 2) {
+  console.log(
+    chalk.red(
+      ' Please enter facebook username and password' + 
+      'to generate handsup API token.\n\n'
+    ),
+    'gen_token --help \n\n' +
+    chalk.yellow(
+      'Note: next version of this tool will generate a new ' + 
+      'facebook account for you'
+    )
+  )
+  
+  process.exit(1)
+}
+
+//goFlow(username, password)
