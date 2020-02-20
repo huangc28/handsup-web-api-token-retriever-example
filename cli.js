@@ -77,13 +77,13 @@ function * tokenGenFlow (username, password, envOrigin, dotEnvFilePath) {
     // @TODO find a way to not reading all file content into memory before writing. 
     //       It fails if we are reading large glob.
     const content = yield readDotEnvFile(dotEnvFilePath)
-    const reg = new RegExp('^VUE_APP_API_TOKEN=.+$', 'gm')
+    const regApiToken = new RegExp('^VUE_APP_API_TOKEN=.+$', 'gm')
     
     // if .env.development.local is found in the project directory, try replace `VUE_APP_API_TOKEN` with the value of apiToken
-    if (reg.test(content)) {
+    if (regApiToken.test(content)) {
       yield writeToDotEnvFile(
         dotEnvFilePath,  
-        content.replace(reg, `VUE_APP_API_TOKEN=${apiToken.value}\n`)
+        content.replace(regApiToken, `VUE_APP_API_TOKEN=${apiToken.value}\n`)
       ) 
     } else {
       yield appendToDotEnvFile(
@@ -97,7 +97,6 @@ function * tokenGenFlow (username, password, envOrigin, dotEnvFilePath) {
     
     console.log(
       chalk.green('API token has renewed!')
-      
     )
   } catch (err) {
     throw err
@@ -124,7 +123,7 @@ function goFlow (username, password, envOrigin, dotEnvFilePath) {
   go(gen.next())
     .catch(err => {
       console.error(
-        chalk.error(
+        chalk.red(
           'Error occurrd: \n\n' +
           err.message
         )
